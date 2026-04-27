@@ -98,23 +98,30 @@ jobs:
         run: |
           go mod tidy
 
-      - name: Build flex-2-csi migration tool linux tarball
+      - name: Build flex-2-csi migration tool (all platforms)
         working-directory: flex-2-csi-migration-tool
         run: |
-          make dist-linux
+          make dist
 
-      - name: Upload flex-2-csi migration tool linux tarball
+      - name: Upload flex-2-csi migration tool artifacts
         if: matrix.go-version == 'stable'
         uses: actions/upload-artifact@v4
         with:
-          name: kubectl-flex-to-csi-linux-tarball
-          path: flex-2-csi-migration-tool/dist/kubectl-flex-to-csi-linux.tar.gz
+          name: kubectl-flex-to-csi-all-platforms
+          path: |
+            flex-2-csi-migration-tool/dist/kubectl-flex-to-csi-linux.tar.gz
+            flex-2-csi-migration-tool/dist/kubectl-flex-to-csi-macos.zip
+            flex-2-csi-migration-tool/dist/kubectl-flex-to-csi-windows.zip
           if-no-files-found: error
+
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/') && matrix.go-version == 'stable'
         uses: softprops/action-gh-release@v1
         with:
-          files: flex-2-csi-migration-tool/dist/kubectl-flex-to-csi-linux.tar.gz
+          files: |
+            flex-2-csi-migration-tool/dist/kubectl-flex-to-csi-linux.tar.gz
+            flex-2-csi-migration-tool/dist/kubectl-flex-to-csi-macos.zip
+            flex-2-csi-migration-tool/dist/kubectl-flex-to-csi-windows.zip
           generate_release_notes: true
           draft: false
           prerelease: false
@@ -131,17 +138,26 @@ jobs:
             TAG_NAME="${GITHUB_REF#refs/tags/}"
             echo "📦 Release created: $TAG_NAME"
             echo ""
-            echo "🔗 Download URL:"
-            echo "https://github.com/${{ github.repository }}/releases/download/${TAG_NAME}/kubectl-flex-to-csi-linux.tar.gz"
+            echo "🔗 Download URLs:"
+            echo ""
+            echo "Linux (tar.gz):"
+            echo "  https://github.com/${{ github.repository }}/releases/download/${TAG_NAME}/kubectl-flex-to-csi-linux.tar.gz"
+            echo ""
+            echo "macOS (zip):"
+            echo "  https://github.com/${{ github.repository }}/releases/download/${TAG_NAME}/kubectl-flex-to-csi-macos.zip"
+            echo ""
+            echo "Windows (zip):"
+            echo "  https://github.com/${{ github.repository }}/releases/download/${TAG_NAME}/kubectl-flex-to-csi-windows.zip"
             echo ""
             echo "🌐 Release page:"
-            echo "https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}"
+            echo "  https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}"
           else
-            echo "📦 Artifact uploaded: kubectl-flex-to-csi-linux-tarball"
+            echo "📦 Artifact uploaded: kubectl-flex-to-csi-all-platforms"
             echo ""
             echo "🔗 Download from:"
-            echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo "  https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             echo ""
+            echo "Includes: Linux (tar.gz), macOS (zip), Windows (zip)"
             echo "Note: Artifacts are available for 90 days"
           fi
           echo "=========================================="
