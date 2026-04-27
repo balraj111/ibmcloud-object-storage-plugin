@@ -150,7 +150,8 @@ jobs:
 
       - name: Publish coverage
         if: success() && matrix.go-version == 'stable'
+        continue-on-error: true
         env:
-          GHE_TOKEN: ${{ secrets.GHE_TOKEN }}
+          GHE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ./scripts/publishCoverage.sh
