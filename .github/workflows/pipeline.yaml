@@ -120,6 +120,32 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Display download links
+        if: matrix.go-version == 'stable'
+        run: |
+          echo "=========================================="
+          echo "Build completed successfully!"
+          echo "=========================================="
+          echo ""
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+            echo "📦 Release created: $TAG_NAME"
+            echo ""
+            echo "🔗 Download URL:"
+            echo "https://github.com/${{ github.repository }}/releases/download/${TAG_NAME}/kubectl-flex-to-csi-linux.tar.gz"
+            echo ""
+            echo "🌐 Release page:"
+            echo "https://github.com/${{ github.repository }}/releases/tag/${TAG_NAME}"
+          else
+            echo "📦 Artifact uploaded: kubectl-flex-to-csi-linux-tarball"
+            echo ""
+            echo "🔗 Download from:"
+            echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo ""
+            echo "Note: Artifacts are available for 90 days"
+          fi
+          echo "=========================================="
+
 
 
       - name: Publish coverage
