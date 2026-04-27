@@ -110,6 +110,17 @@ jobs:
           name: kubectl-flex-to-csi-linux-tarball
           path: flex-2-csi-migration-tool/dist/kubectl-flex-to-csi-linux.tar.gz
           if-no-files-found: error
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/') && matrix.go-version == 'stable'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: flex-2-csi-migration-tool/dist/kubectl-flex-to-csi-linux.tar.gz
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Publish coverage
         if: success() && matrix.go-version == 'stable'
