@@ -28,7 +28,7 @@ type MigrationState struct {
 
 // CreatedResource represents a resource created during migration
 type CreatedResource struct {
-	Type      string    `json:"type"`      // Secret, PVC, Deployment, etc.
+	Type      string    `json:"type"` // Secret, PVC, Deployment, etc.
 	Name      string    `json:"name"`
 	Namespace string    `json:"namespace"`
 	CreatedAt time.Time `json:"createdAt"`
@@ -59,7 +59,7 @@ func (s *MigrationState) AddCreatedResource(resourceType, name, namespace string
 		CreatedAt: time.Now(),
 	})
 	s.LastUpdated = time.Now()
-	
+
 	logger.WithFields(logrus.Fields{
 		"type":      resourceType,
 		"name":      name,
@@ -72,7 +72,7 @@ func (s *MigrationState) CompleteStep(stepName string) {
 	s.CompletedSteps = append(s.CompletedSteps, stepName)
 	s.CurrentStep++
 	s.LastUpdated = time.Now()
-	
+
 	logger.WithFields(logrus.Fields{
 		"step":        stepName,
 		"currentStep": s.CurrentStep,
@@ -84,7 +84,7 @@ func (s *MigrationState) MarkFailed(err error) {
 	s.Status = "failed"
 	s.ErrorMessage = err.Error()
 	s.LastUpdated = time.Now()
-	
+
 	logger.WithError(err).Error("Migration marked as failed")
 }
 
@@ -92,7 +92,7 @@ func (s *MigrationState) MarkFailed(err error) {
 func (s *MigrationState) MarkCompleted() {
 	s.Status = "completed"
 	s.LastUpdated = time.Now()
-	
+
 	logger.Info("Migration marked as completed")
 }
 
@@ -157,7 +157,7 @@ func (s *MigrationState) DeleteState() error {
 // ListMigrationStates lists all migration states
 func ListMigrationStates() ([]*MigrationState, error) {
 	stateDir := filepath.Join(os.Getenv("HOME"), ".kube", "flex-to-csi-state")
-	
+
 	// Check if directory exists
 	if _, err := os.Stat(stateDir); os.IsNotExist(err) {
 		return []*MigrationState{}, nil

@@ -291,9 +291,9 @@ func TestCreateCSISecret(t *testing.T) {
 			Namespace: "default",
 		},
 		Data: map[string][]byte{
-			"access-key":         []byte("test-access-key"),
-			"secret-key":         []byte("test-secret-key"),
-			"res-conf-apikey":    []byte("test-apikey"),
+			"access-key":      []byte("test-access-key"),
+			"secret-key":      []byte("test-secret-key"),
+			"res-conf-apikey": []byte("test-apikey"),
 		},
 	}
 

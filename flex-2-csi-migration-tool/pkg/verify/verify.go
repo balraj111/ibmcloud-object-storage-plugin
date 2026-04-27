@@ -109,9 +109,9 @@ func GetMountOptions(pvName, nodeIP string) (*MountOptions, error) {
 
 	// Execute kubectl debug command
 	fmt.Printf("Executing kubectl debug on node %s...\n\n", nodeIP)
-	
+
 	cmdStr := fmt.Sprintf("ps aux | grep s3fs | grep %s | grep -v grep", pvName)
-	
+
 	cmd := exec.Command("kubectl", "debug", fmt.Sprintf("node/%s", nodeIP),
 		"-it", "--image=ubuntu", "--",
 		"bash", "-c", cmdStr)
@@ -123,7 +123,7 @@ func GetMountOptions(pvName, nodeIP string) (*MountOptions, error) {
 	// Set timeout
 	execCtx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	
+
 	cmd = exec.CommandContext(execCtx, "kubectl", "debug", fmt.Sprintf("node/%s", nodeIP),
 		"-it", "--image=ubuntu", "--",
 		"bash", "-c", cmdStr)
@@ -166,7 +166,7 @@ func ParseS3FSProcess(processLine string) (*MountOptions, error) {
 	opts.Retries = extractOption(processLine, "retries")
 	opts.MaxDirtyData = extractOption(processLine, "max_dirty_data")
 	opts.MultireqMax = extractOption(processLine, "multireq_max")
-	
+
 	// Extract kernel_cache flag
 	opts.KernelCache = strings.Contains(processLine, "-o kernel_cache")
 
@@ -188,7 +188,7 @@ func DisplayMountOptions(opts *MountOptions) {
 	fmt.Printf("PV Name: %s\n", opts.PVName)
 	fmt.Printf("PVC Name: %s\n", opts.PVCName)
 	fmt.Printf("Namespace: %s\n", opts.Namespace)
-	
+
 	fmt.Println("\nMount Options:")
 	fmt.Println("========================================")
 	fmt.Printf("  multipart_size:        %s MB\n", opts.MultipartSize)
@@ -200,6 +200,5 @@ func DisplayMountOptions(opts *MountOptions) {
 	fmt.Printf("  kernel_cache:          %t\n", opts.KernelCache)
 	fmt.Println("========================================")
 }
-
 
 // Made with Bob
