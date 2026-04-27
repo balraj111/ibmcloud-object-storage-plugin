@@ -60,7 +60,24 @@ jobs:
           make deps
 
       - name: Check root project code formatting
-        run: make fmt
+        run: |
+          root_go_files=$(find . -path './vendor' -prune -o -path './flex-2-csi-migration-tool' -prune -o -name '*.go' -print)
+          unformatted=$(gofmt -l $root_go_files)
+          if [ -n "$unformatted" ]; then
+            echo "Error: The following root project files need formatting:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      - name: Check flex-2-csi migration tool formatting
+        run: |
+          tool_go_files=$(find flex-2-csi-migration-tool -name '*.go' -print)
+          unformatted=$(gofmt -l $tool_go_files)
+          if [ -n "$unformatted" ]; then
+            echo "Error: The following flex-2-csi migration tool files need formatting:"
+            echo "$unformatted"
+            exit 1
+          fi
 
       - name: Run root project unit tests
         run: make test
