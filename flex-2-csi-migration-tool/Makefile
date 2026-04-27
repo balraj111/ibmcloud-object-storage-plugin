@@ -30,7 +30,7 @@ tidy:
 # Build the binary
 build:
 	@echo "Building kubectl-flex-to-csi..."
-	go build -o kubectl-flex-to-csi cmd/kubectl-flex-to-csi/main.go
+	go build -o kubectl-flex-to-csi ./cmd/kubectl-flex-to-csi/main.go
 	@echo "✅ Build complete"
 
 # Verify module state and full package build
@@ -131,7 +131,7 @@ dist-mac: build
 dist-windows:
 	@echo "Creating Windows distribution package..."
 	@echo "Building Windows binary..."
-	@GOOS=windows GOARCH=amd64 go build -o kubectl-flex-to-csi.exe cmd/kubectl-flex-to-csi/main.go
+	@GOOS=windows GOARCH=amd64 go build -o kubectl-flex-to-csi.exe ./cmd/kubectl-flex-to-csi/main.go
 	@rm -rf dist/kubectl-flex-to-csi-windows
 	@mkdir -p dist/kubectl-flex-to-csi-windows/kubeconfig
 	@cp kubectl-flex-to-csi.exe dist/kubectl-flex-to-csi-windows/
@@ -146,7 +146,7 @@ dist-windows:
 dist-linux:
 	@echo "Creating Linux distribution package..."
 	@echo "Building Linux binary..."
-	@GOOS=linux GOARCH=amd64 go build -o kubectl-flex-to-csi-linux cmd/kubectl-flex-to-csi/main.go
+	@GOOS=linux GOARCH=amd64 go build -o kubectl-flex-to-csi-linux ./cmd/kubectl-flex-to-csi/main.go
 	@rm -rf dist/kubectl-flex-to-csi-linux
 	@mkdir -p dist/kubectl-flex-to-csi-linux/kubeconfig
 	@cp kubectl-flex-to-csi-linux dist/kubectl-flex-to-csi-linux/kubectl-flex-to-csi
