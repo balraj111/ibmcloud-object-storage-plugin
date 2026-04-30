@@ -266,16 +266,48 @@ jobs:
           body: |
             ## 🚀 IBM Cloud Object Storage Plugin - Flex to CSI Migration Tool
             
-            ### What's Included
+            ### 📦 What's Included
             - **Linux** (tar.gz): kubectl-flex-to-csi-linux.tar.gz
-            - **macOS** (zip): kubectl-flex-to-csi-macos.zip
+            - **macOS** (zip): kubectl-flex-to-csi-macos.zip - Universal binary (Intel + Apple Silicon)
             - **Windows** (zip): kubectl-flex-to-csi-windows.zip
             
-            ### Installation
-            Download the appropriate package for your platform and extract it.
+            ### 📥 Installation
             
-            ### Checksums
-            SHA256 checksums are provided for verification.
+            #### Linux
+            ```bash
+            tar -xzf kubectl-flex-to-csi-linux.tar.gz
+            cd kubectl-flex-to-csi-linux
+            chmod +x kubectl-flex-to-csi
+            ./kubectl-flex-to-csi --help
+            ```
+            
+            #### macOS
+            ⚠️ **Important**: macOS may block the binary due to security settings.
+            
+            ```bash
+            unzip kubectl-flex-to-csi-macos.zip
+            cd kubectl-flex-to-csi-macos
+            ./INSTALL.sh  # This removes the quarantine attribute
+            ./kubectl-flex-to-csi --help
+            ```
+            
+            **See `MACOS_INSTALL.md` in the package for detailed instructions.**
+            
+            #### Windows
+            ```powershell
+            # Extract kubectl-flex-to-csi-windows.zip
+            .\kubectl-flex-to-csi.exe --help
+            ```
+            
+            ### 🔐 Security & Verification
+            - SHA256 checksums are provided for all packages
+            - macOS package includes `INSTALL.sh` script to bypass Gatekeeper
+            - All binaries are built from source in GitHub Actions
+            
+            ### 📖 Documentation
+            - [Main README](https://github.com/balraj111/ibmcloud-object-storage-plugin/blob/flex-2-csi-migration/flex-2-csi-migration-tool/README.md)
+            - [macOS Installation Guide](https://github.com/balraj111/ibmcloud-object-storage-plugin/blob/flex-2-csi-migration/flex-2-csi-migration-tool/MACOS_INSTALL.md)
+            - [Release Notes](https://github.com/balraj111/ibmcloud-object-storage-plugin/blob/flex-2-csi-migration/flex-2-csi-migration-tool/RELEASE.md)
           generate_release_notes: true
           draft: false
           prerelease: false

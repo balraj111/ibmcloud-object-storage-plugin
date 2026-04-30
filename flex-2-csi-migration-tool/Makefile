@@ -114,17 +114,33 @@ dist: dist-mac dist-windows dist-linux
 	@echo "✅ All distribution packages created"
 
 # Create macOS distribution
-dist-mac: build
+dist-mac:
 	@echo "Creating macOS distribution package..."
+	@echo "Building macOS binary with optimized flags..."
+	@GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o kubectl-flex-to-csi-amd64 ./cmd/kubectl-flex-to-csi/main.go
+	@GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o kubectl-flex-to-csi-arm64 ./cmd/kubectl-flex-to-csi/main.go
+	@echo "Creating universal binary..."
+	@lipo -create -output kubectl-flex-to-csi kubectl-flex-to-csi-amd64 kubectl-flex-to-csi-arm64 || cp kubectl-flex-to-csi-amd64 kubectl-flex-to-csi
+	@rm -f kubectl-flex-to-csi-amd64 kubectl-flex-to-csi-arm64
 	@rm -rf dist/kubectl-flex-to-csi-macos
 	@mkdir -p dist/kubectl-flex-to-csi-macos/kubeconfig
 	@cp kubectl-flex-to-csi dist/kubectl-flex-to-csi-macos/
 	@cp run.command dist/kubectl-flex-to-csi-macos/
 	@cp LAUNCHER_README.md dist/kubectl-flex-to-csi-macos/
+	@cp MACOS_INSTALL.md dist/kubectl-flex-to-csi-macos/
 	@cp dist-template/kubeconfig/README.md dist/kubectl-flex-to-csi-macos/kubeconfig/
+	@echo "#!/bin/bash" > dist/kubectl-flex-to-csi-macos/INSTALL.sh
+	@echo "# Remove quarantine attribute from macOS" >> dist/kubectl-flex-to-csi-macos/INSTALL.sh
+	@echo "xattr -d com.apple.quarantine kubectl-flex-to-csi 2>/dev/null || true" >> dist/kubectl-flex-to-csi-macos/INSTALL.sh
+	@echo "xattr -d com.apple.quarantine run.command 2>/dev/null || true" >> dist/kubectl-flex-to-csi-macos/INSTALL.sh
+	@echo "chmod +x kubectl-flex-to-csi" >> dist/kubectl-flex-to-csi-macos/INSTALL.sh
+	@echo "chmod +x run.command" >> dist/kubectl-flex-to-csi-macos/INSTALL.sh
+	@echo "echo 'Installation complete! You can now run ./kubectl-flex-to-csi or ./run.command'" >> dist/kubectl-flex-to-csi-macos/INSTALL.sh
+	@chmod +x dist/kubectl-flex-to-csi-macos/INSTALL.sh
 	@chmod +x dist/kubectl-flex-to-csi-macos/run.command
 	@chmod +x dist/kubectl-flex-to-csi-macos/kubectl-flex-to-csi
 	@cd dist && zip -r kubectl-flex-to-csi-macos.zip kubectl-flex-to-csi-macos
+	@rm kubectl-flex-to-csi
 	@echo "✅ macOS package created: dist/kubectl-flex-to-csi-macos.zip"
 
 # Create Windows distribution

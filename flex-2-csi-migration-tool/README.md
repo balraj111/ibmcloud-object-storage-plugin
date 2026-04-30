@@ -23,20 +23,57 @@ A comprehensive, user-friendly CLI tool for migrating IBM Cloud Object Storage F
 
 ## 🚀 Installation
 
-### Option 1: Download Binary
+### Download Pre-built Binaries
+
+Download the appropriate package for your platform from the [releases page](https://github.com/balraj111/ibmcloud-object-storage-plugin/releases):
+
+- **Linux**: `kubectl-flex-to-csi-linux.tar.gz`
+- **macOS**: `kubectl-flex-to-csi-macos.zip`
+- **Windows**: `kubectl-flex-to-csi-windows.zip`
+
+#### Linux Installation
 
 ```bash
-# Download the latest release
-curl -LO https://github.com/your-org/kubectl-flex-to-csi/releases/latest/download/kubectl-flex-to-csi
+# Download and extract
+wget https://github.com/balraj111/ibmcloud-object-storage-plugin/releases/latest/download/kubectl-flex-to-csi-linux.tar.gz
+tar -xzf kubectl-flex-to-csi-linux.tar.gz
+cd kubectl-flex-to-csi-linux
 
-# Make it executable
+# Make executable and run
 chmod +x kubectl-flex-to-csi
-
-# Move to PATH
-sudo mv kubectl-flex-to-csi /usr/local/bin/
+./kubectl-flex-to-csi --help
 ```
 
-### Option 2: Build from Source
+#### macOS Installation
+
+⚠️ **Important for macOS users**: macOS may block the binary due to security settings. See [MACOS_INSTALL.md](MACOS_INSTALL.md) for detailed instructions.
+
+```bash
+# Download and extract
+curl -LO https://github.com/balraj111/ibmcloud-object-storage-plugin/releases/latest/download/kubectl-flex-to-csi-macos.zip
+unzip kubectl-flex-to-csi-macos.zip
+cd kubectl-flex-to-csi-macos
+
+# Run the installation script to bypass macOS security
+./INSTALL.sh
+
+# Or manually remove quarantine
+xattr -d com.apple.quarantine kubectl-flex-to-csi
+chmod +x kubectl-flex-to-csi
+./kubectl-flex-to-csi --help
+```
+
+**📖 For detailed macOS installation instructions, see [MACOS_INSTALL.md](MACOS_INSTALL.md)**
+
+#### Windows Installation
+
+```powershell
+# Download and extract kubectl-flex-to-csi-windows.zip
+# Then run:
+.\kubectl-flex-to-csi.exe --help
+```
+
+### Build from Source
 
 ```bash
 # Clone the repository
